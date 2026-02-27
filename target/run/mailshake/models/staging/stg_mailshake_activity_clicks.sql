@@ -1,0 +1,76 @@
+
+
+  create or replace view `mailshake-analysis-486717`.`SILVER`.`stg_mailshake_activity_clicks`
+  OPTIONS()
+  as 
+
+WITH source AS (
+    SELECT * 
+    FROM `mailshake-analysis-486717.BRONZE.activity_clicks`
+    
+),
+
+parsed AS (
+    SELECT
+        -- Ingestion metadata
+        team_id,
+        CAST(campaign_id AS INT64) AS campaign_id,  -- ✅ From BRONZE table column
+        CAST(message_id AS INT64) AS message_id,     -- ✅ From BRONZE table column
+        extracted_at,
+        source_endpoint,
+
+        -- Primary identifier
+        CAST(JSON_VALUE(payload, '$.id') AS INT64) AS click_id,
+
+        -- Event metadata
+        CAST(JSON_VALUE(payload, '$.actionDate') AS TIMESTAMP) AS action_date,
+        JSON_VALUE(payload, '$.object') AS object_type,
+        JSON_VALUE(payload, '$.url') AS clicked_url,
+        CAST(JSON_VALUE(payload, '$.isDuplicate') AS BOOL) AS is_duplicate,
+
+        -- Campaign info (from nested payload - backup if needed)
+        CAST(JSON_VALUE(payload, '$.campaign.id') AS INT64) AS payload_campaign_id,
+        JSON_VALUE(payload, '$.campaign.title') AS campaign_title,
+        JSON_VALUE(payload, '$.campaign.object') AS campaign_object,
+        JSON_VALUE(payload, '$.campaign.wizardStatus') AS campaign_wizard_status,
+
+        -- Parent sent message info
+        CAST(JSON_VALUE(payload, '$.parent.id') AS INT64) AS parent_sent_id,
+        JSON_VALUE(payload, '$.parent.type') AS parent_type,
+        JSON_VALUE(payload, '$.parent.object') AS parent_object,
+        CAST(JSON_VALUE(payload, '$.parent.message.id') AS INT64) AS parent_message_id,
+        JSON_VALUE(payload, '$.parent.message.type') AS parent_message_type,
+        CAST(JSON_VALUE(payload, '$.parent.message.replyToID') AS INT64) AS parent_reply_to_id,
+        JSON_VALUE(payload, '$.parent.message.subject') AS parent_subject,
+
+        -- Recipient info
+        CAST(JSON_VALUE(payload, '$.recipient.id') AS INT64) AS recipient_id,
+        CAST(JSON_VALUE(payload, '$.recipient.contactID') AS INT64) AS recipient_contact_id,
+        JSON_VALUE(payload, '$.recipient.emailAddress') AS recipient_email,
+        JSON_VALUE(payload, '$.recipient.first') AS recipient_first_name,
+        JSON_VALUE(payload, '$.recipient.last') AS recipient_last_name,
+        JSON_VALUE(payload, '$.recipient.fullName') AS recipient_full_name,
+        CAST(JSON_VALUE(payload, '$.recipient.created') AS TIMESTAMP) AS recipient_created_at,
+        CAST(JSON_VALUE(payload, '$.recipient.isPaused') AS BOOL) AS recipient_is_paused,
+
+        -- Recipient custom fields
+        JSON_VALUE(payload, '$.recipient.fields.account') AS account,
+        JSON_VALUE(payload, '$.recipient.fields.position') AS position,
+        JSON_VALUE(payload, '$.recipient.fields.link') AS job_link,
+        JSON_VALUE(payload, '$.recipient.fields.phoneNumber') AS phone_number,
+        JSON_VALUE(payload, '$.recipient.fields.linkedInUrl') AS linkedin_url,
+        JSON_VALUE(payload, '$.recipient.fields.facebookUrl') AS facebook_url,
+        JSON_VALUE(payload, '$.recipient.fields.instagramID') AS instagram_id,
+        JSON_VALUE(payload, '$.recipient.fields.twitterID') AS twitter_id
+
+    FROM source
+    WHERE CAST(JSON_VALUE(payload, '$.isDuplicate') AS BOOL) = FALSE  -- Filter duplicate clicks
+)
+
+-- Deduplication
+SELECT * FROM parsed
+QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY click_id
+    ORDER BY extracted_at DESC
+) = 1;
+

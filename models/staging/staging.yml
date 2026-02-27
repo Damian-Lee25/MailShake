@@ -1,0 +1,415 @@
+version: 2
+
+models:
+  - name: stg_mailshake_activity_sent
+    description: "Cleaned email sent events from Mailshake activity"
+    columns:
+      - name: sent_id
+        description: "Unique identifier for the sent event"
+        tests:
+          - not_null
+          - unique
+
+      - name: action_date
+        description: "Timestamp when the email was sent"
+        tests:
+          - not_null
+
+      - name: object_type
+        description: "Mailshake object type (sent)"
+        tests:
+          - not_null
+
+      - name: team_id
+        description: "Mailshake team identifier"
+        tests:
+          - not_null
+
+      - name: campaign_id
+        description: "Associated campaign ID"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_campaigns')
+                field: campaign_id
+              severity: warn
+
+      - name: recipient_id
+        description: "Recipient who received the email"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_recipients')
+                field: recipient_id
+              severity: warn
+
+      - name: extracted_at
+        description: "Ingestion timestamp"
+        tests:
+          - not_null
+  
+  - name: stg_mailshake_activity_opens
+    description: "Cleaned email open events from Mailshake activity"
+    columns:
+      - name: open_id
+        description: "Unique identifier for the open event"
+        tests:
+          - not_null
+          - unique
+
+      - name: action_date
+        description: "Timestamp when the open occurred"
+        tests:
+          - not_null
+
+      - name: object_type
+        description: "Mailshake object type (open)"
+        tests:
+          - not_null
+
+      - name: team_id
+        description: "Mailshake team identifier"
+        tests:
+          - not_null
+
+      - name: campaign_id
+        description: "Associated campaign ID"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_campaigns')
+                field: campaign_id
+              severity: warn
+
+      - name: recipient_id
+        description: "Recipient who opened the email"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_recipients')
+                field: recipient_id
+              severity: warn
+
+      - name: parent_sent_id
+        description: "Sent message that generated the open"
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_activity_sent')
+                field: sent_id
+              severity: warn
+
+      - name: extracted_at
+        description: "Ingestion timestamp"
+        tests:
+          - not_null
+  
+  - name: stg_mailshake_activity_replies
+    description: "Cleaned email reply events from Mailshake"
+    columns:
+      - name: reply_id
+        description: "Primary key for reply activity"
+        tests:
+          - not_null
+          - unique
+
+      - name: action_date
+        description: "Timestamp when the reply occurred"
+        tests:
+          - not_null
+
+      - name: team_id
+        description: "Mailshake team identifier"
+        tests:
+          - not_null
+
+      - name: object_type
+        description: "Mailshake object type (reply)"
+        tests:
+          - not_null
+
+      - name: reply_type
+        description: "Reply classification (e.g. out-of-office)"
+        tests:
+          - not_null
+
+      - name: campaign_id
+        description: "Campaign associated with the reply"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_campaigns')
+                field: campaign_id
+              severity: warn
+
+      - name: recipient_id
+        description: "Recipient who sent the reply"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_recipients')
+                field: recipient_id
+              severity: warn
+
+      - name: parent_sent_id
+        description: "Sent message this reply belongs to"
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_activity_sent')
+                field: sent_id
+              severity: warn
+
+      - name: extracted_at
+        description: "Ingestion timestamp"
+        tests:
+          - not_null
+
+  - name: stg_mailshake_activity_clicks
+    description: "Cleaned link click events from Mailshake activity"
+    columns:
+      - name: click_id  # ← UNIQUE primary key name
+        description: "Unique identifier for the click event"
+        tests:
+          - not_null
+          - unique
+
+      - name: action_date  # ← SHARED
+        description: "Timestamp when the click occurred"
+        tests:
+          - not_null
+
+      - name: clicked_url  # ← UNIQUE to clicks
+        description: "The URL that was clicked"
+        tests:
+          - not_null
+
+      - name: object_type  # ← SHARED
+        description: "Mailshake object type (click)"
+        tests:
+          - not_null
+
+      - name: team_id  # ← SHARED
+        description: "Mailshake team identifier"
+        tests:
+          - not_null
+
+      - name: campaign_id  # ← SHARED
+        description: "Associated campaign ID"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_campaigns')
+                field: campaign_id
+              severity: warn
+
+      - name: recipient_id  # ← SHARED
+        description: "Recipient who clicked the link"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_recipients')
+                field: recipient_id
+              severity: warn
+
+      - name: parent_sent_id  # ← SHARED
+        description: "Sent message that generated the click"
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_activity_sent')
+                field: sent_id
+              severity: warn
+
+      - name: extracted_at  # ← SHARED
+        description: "Ingestion timestamp"
+        tests:
+          - not_null
+
+  - name: stg_mailshake_campaigns
+    description: "Staging model for Mailshake campaigns, cleaned and flattened from raw JSON"
+    columns:
+      - name: campaign_id
+        description: "The unique ID for the campaign assigned by Mailshake"
+        tests:
+          - unique
+          - not_null
+
+      - name: team_id
+        description: "Mailshake team identifier"
+        tests:
+          - not_null
+
+      - name: campaign_title
+        description: "Name/title of the campaign"
+
+      - name: is_archived
+        description: "Indicates if the campaign has been archived"
+        tests:
+          - not_null
+
+      - name: wizard_status
+        description: "The current setup state of the campaign (e.g., 'active', 'draft')"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['active', 'draft', 'closed']
+              severity: warn
+
+      - name: created_at
+        description: "Timestamp when the campaign was created"
+        tests:
+          - not_null
+
+      - name: sender_email
+        description: "Email address of the sender"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: extracted_at
+        description: "Ingestion timestamp"
+        tests:
+          - not_null
+
+  - name: stg_mailshake_recipients
+    description: "Staging model for Mailshake recipients - people in campaigns"
+    columns:
+      - name: recipient_id
+        description: "Unique identifier for the recipient"
+        tests:
+          - unique
+          - not_null
+
+      - name: campaign_id
+        description: "Campaign this recipient belongs to"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_mailshake_campaigns')
+                field: campaign_id
+              severity: warn
+
+      - name: team_id
+        description: "Mailshake team identifier"
+        tests:
+          - not_null
+
+      - name: email_address
+        description: "Recipient's email address"
+        tests:
+          - not_null
+
+      - name: full_name
+        description: "Recipient's full name"
+
+      - name: created_at
+        description: "Timestamp when recipient was added"
+        tests:
+          - not_null
+
+      - name: is_paused
+        description: "Whether this recipient is paused"
+        tests:
+          - not_null
+
+      - name: extracted_at
+        description: "Ingestion timestamp"
+        tests:
+          - not_null
+
+  - name: stg_mailshake_leads
+    description: "Staging model for Mailshake leads"
+    columns:
+      - name: lead_id
+        description: "Unique identifier for the lead"
+        tests:
+          - unique
+          - not_null
+
+      - name: team_id
+        description: "Mailshake team identifier"
+        tests:
+          - not_null
+
+      - name: email_address
+        description: "Lead's email address"
+
+      - name: full_name
+        description: "Lead's full name"
+
+      - name: created_at
+        description: "Timestamp when lead was created"
+
+      - name: extracted_at
+        description: "Ingestion timestamp"
+        tests:
+          - not_null
+
+  - name: stg_mailshake_senders
+    description: "Staging model for Mailshake email senders (sending accounts)"
+    columns:
+      - name: sender_id
+        description: "Unique identifier for the sender"
+        tests:
+          - unique
+          - not_null
+
+      - name: team_id
+        description: "Mailshake team identifier"
+        tests:
+          - not_null
+
+      - name: email_address
+        description: "Sender's email address"
+        tests:
+          - not_null
+
+      - name: from_name
+        description: "Display name for the sender"
+
+      - name: is_verified
+        description: "Whether the email address is verified"
+
+      - name: extracted_at
+        description: "Ingestion timestamp"
+        tests:
+          - not_null
+
+  - name: stg_mailshake_team_members
+    description: "Staging model for Mailshake team members who manage campaigns"
+    columns:
+      - name: user_id
+        description: "Unique identifier for the team member"
+        tests:
+          - unique
+          - not_null
+
+      - name: team_id
+        description: "Mailshake team identifier"
+        tests:
+          - not_null
+
+      - name: email_address
+        description: "Team member's email address"
+
+      - name: full_name
+        description: "Team member's full name"
+
+      - name: role
+        description: "Team member's role in the team"
+
+      - name: extracted_at
+        description: "Ingestion timestamp"
+        tests:
+          - not_null

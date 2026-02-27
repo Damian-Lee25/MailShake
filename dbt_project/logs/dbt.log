@@ -1,0 +1,90 @@
+[0m03:34:51.037395 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D35A954C20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D35BAB3ED0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D35BAB3B10>]}
+
+
+============================== 03:34:51.042272 | 74eb0af0-ddeb-4027-8ecd-0240e84e4813 ==============================
+[0m03:34:51.042272 [info ] [MainThread]: Running with dbt=1.11.2
+[0m03:34:51.043076 [debug] [MainThread]: running dbt with arguments {'no_print': 'None', 'write_json': 'True', 'log_format': 'default', 'invocation_command': 'dbt run', 'cache_selected_only': 'False', 'warn_error': 'None', 'indirect_selection': 'eager', 'partial_parse': 'True', 'log_path': 'C:\\Users\\dam91\\Data_Projects\\MailShake\\dbt_project\\logs', 'send_anonymous_usage_stats': 'True', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'fail_fast': 'False', 'version_check': 'True', 'use_experimental_parser': 'False', 'quiet': 'False', 'introspect': 'True', 'empty': 'False', 'log_cache_events': 'False', 'debug': 'False', 'profiles_dir': 'C:\\Users\\dam91\\.dbt', 'use_colors': 'True', 'printer_width': '80', 'target_path': 'None'}
+[0m03:34:52.207740 [debug] [MainThread]: Snowflake adapter: Setting snowflake.connector to ERROR (file logging only)
+[0m03:34:52.208224 [debug] [MainThread]: Snowflake adapter: Setting botocore to ERROR (file logging only)
+[0m03:34:52.208538 [debug] [MainThread]: Snowflake adapter: Setting boto3 to ERROR (file logging only)
+[0m03:34:52.574372 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '74eb0af0-ddeb-4027-8ecd-0240e84e4813', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D35ADCD810>]}
+[0m03:34:52.704597 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '74eb0af0-ddeb-4027-8ecd-0240e84e4813', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D36DF0BCE0>]}
+[0m03:34:52.706495 [info ] [MainThread]: Registered adapter: snowflake=1.11.1
+[0m03:34:53.179931 [debug] [MainThread]: checksum: 3d40d8bbe1bef07db1c24822f2dbfff8bc07f2a48ed4fe2658a40653aec0b54b, vars: {}, profile: , target: , version: 1.11.2
+[0m03:34:53.182139 [info ] [MainThread]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m03:34:53.183853 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': '74eb0af0-ddeb-4027-8ecd-0240e84e4813', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D36DF32350>]}
+[0m03:34:54.888696 [warn ] [MainThread]: [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+There are 2 unused configuration paths:
+- models.gold
+- models.silver
+[0m03:34:54.900676 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': '74eb0af0-ddeb-4027-8ecd-0240e84e4813', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D3591D9400>]}
+[0m03:34:54.993975 [debug] [MainThread]: Wrote artifact WritableManifest to C:\Users\dam91\Data_Projects\MailShake\dbt_project\target\manifest.json
+[0m03:34:55.000753 [debug] [MainThread]: Wrote artifact SemanticManifest to C:\Users\dam91\Data_Projects\MailShake\dbt_project\target\semantic_manifest.json
+[0m03:34:55.063245 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '74eb0af0-ddeb-4027-8ecd-0240e84e4813', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D36E7ADC50>]}
+[0m03:34:55.063878 [info ] [MainThread]: Found 1 model, 9 sources, 522 macros
+[0m03:34:55.064850 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '74eb0af0-ddeb-4027-8ecd-0240e84e4813', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D36E485300>]}
+[0m03:34:55.069311 [info ] [MainThread]: 
+[0m03:34:55.070400 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
+[0m03:34:55.071065 [info ] [MainThread]: 
+[0m03:34:55.072294 [debug] [MainThread]: Acquiring new snowflake connection 'master'
+[0m03:34:55.074660 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_MAILSHAKE_DB'
+[0m03:34:55.183983 [debug] [ThreadPool]: Using snowflake connection "list_MAILSHAKE_DB"
+[0m03:34:55.184403 [debug] [ThreadPool]: On list_MAILSHAKE_DB: show terse schemas in database MAILSHAKE_DB
+    limit 10000
+/* {"app": "dbt", "dbt_version": "1.11.2", "profile_name": "mailshake", "target_name": "dev", "connection_name": "list_MAILSHAKE_DB"} */
+[0m03:34:55.184711 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m03:34:56.467151 [debug] [ThreadPool]: SQL status: SUCCESS 3 in 1.282 seconds
+[0m03:34:56.473678 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_MAILSHAKE_DB_SILVER'
+[0m03:34:56.504843 [debug] [ThreadPool]: Using snowflake connection "list_MAILSHAKE_DB_SILVER"
+[0m03:34:56.505803 [debug] [ThreadPool]: On list_MAILSHAKE_DB_SILVER: show objects in MAILSHAKE_DB.SILVER
+    limit 10000
+    
+
+/* {"app": "dbt", "dbt_version": "1.11.2", "profile_name": "mailshake", "target_name": "dev", "connection_name": "list_MAILSHAKE_DB_SILVER"} */;
+[0m03:34:56.506562 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m03:34:57.058752 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.552 seconds
+[0m03:34:57.063558 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '74eb0af0-ddeb-4027-8ecd-0240e84e4813', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D36E847D10>]}
+[0m03:34:57.090040 [debug] [Thread-2 (]: Began running node model.mailshake.stg_schema_test
+[0m03:34:57.091530 [info ] [Thread-2 (]: 1 of 1 START sql view model SILVER.stg_schema_test ............................. [RUN]
+[0m03:34:57.093029 [debug] [Thread-2 (]: Acquiring new snowflake connection 'model.mailshake.stg_schema_test'
+[0m03:34:57.093724 [debug] [Thread-2 (]: Began compiling node model.mailshake.stg_schema_test
+[0m03:34:57.102959 [debug] [Thread-2 (]: Writing injected SQL for node "model.mailshake.stg_schema_test"
+[0m03:34:57.106804 [debug] [Thread-2 (]: Began executing node model.mailshake.stg_schema_test
+[0m03:34:57.155794 [debug] [Thread-2 (]: Writing runtime sql for node "model.mailshake.stg_schema_test"
+[0m03:34:57.160411 [debug] [Thread-2 (]: Using snowflake connection "model.mailshake.stg_schema_test"
+[0m03:34:57.161208 [debug] [Thread-2 (]: On model.mailshake.stg_schema_test: create or replace   view MAILSHAKE_DB.SILVER.stg_schema_test
+  
+  
+  
+  
+  as (
+    -- models/silver/stg_test.sql
+select 1 as id
+  )
+/* {"app": "dbt", "dbt_version": "1.11.2", "profile_name": "mailshake", "target_name": "dev", "node_id": "model.mailshake.stg_schema_test"} */;
+[0m03:34:57.161692 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m03:34:57.886634 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 0.725 seconds
+[0m03:34:57.920191 [debug] [Thread-2 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '74eb0af0-ddeb-4027-8ecd-0240e84e4813', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D36EDA9440>]}
+[0m03:34:57.922089 [info ] [Thread-2 (]: 1 of 1 OK created sql view model SILVER.stg_schema_test ........................ [[32mSUCCESS 1[0m in 0.82s]
+[0m03:34:57.924111 [debug] [Thread-2 (]: Finished running node model.mailshake.stg_schema_test
+[0m03:34:57.926600 [debug] [MainThread]: Connection 'master' was properly closed.
+[0m03:34:57.927084 [debug] [MainThread]: Connection 'list_MAILSHAKE_DB' was left open.
+[0m03:34:57.927471 [debug] [MainThread]: On list_MAILSHAKE_DB: Close
+[0m03:34:58.047724 [debug] [MainThread]: Connection 'list_MAILSHAKE_DB_SILVER' was left open.
+[0m03:34:58.048870 [debug] [MainThread]: On list_MAILSHAKE_DB_SILVER: Close
+[0m03:34:58.200875 [debug] [MainThread]: Connection 'model.mailshake.stg_schema_test' was left open.
+[0m03:34:58.201631 [debug] [MainThread]: On model.mailshake.stg_schema_test: Close
+[0m03:34:58.332208 [info ] [MainThread]: 
+[0m03:34:58.333575 [info ] [MainThread]: Finished running 1 view model in 0 hours 0 minutes and 3.26 seconds (3.26s).
+[0m03:34:58.334766 [debug] [MainThread]: Command end result
+[0m03:34:58.377899 [debug] [MainThread]: Wrote artifact WritableManifest to C:\Users\dam91\Data_Projects\MailShake\dbt_project\target\manifest.json
+[0m03:34:58.384086 [debug] [MainThread]: Wrote artifact SemanticManifest to C:\Users\dam91\Data_Projects\MailShake\dbt_project\target\semantic_manifest.json
+[0m03:34:58.394892 [debug] [MainThread]: Wrote artifact RunExecutionResult to C:\Users\dam91\Data_Projects\MailShake\dbt_project\target\run_results.json
+[0m03:34:58.395660 [info ] [MainThread]: 
+[0m03:34:58.397015 [info ] [MainThread]: [32mCompleted successfully[0m
+[0m03:34:58.398026 [info ] [MainThread]: 
+[0m03:34:58.398912 [info ] [MainThread]: Done. PASS=1 WARN=0 ERROR=0 SKIP=0 NO-OP=0 TOTAL=1
+[0m03:34:58.400166 [debug] [MainThread]: Command `dbt run` succeeded at 03:34:58.400031 after 7.58 seconds
+[0m03:34:58.400675 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D36ED38E10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D36E70E450>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002D36E669C50>]}
+[0m03:34:58.401072 [debug] [MainThread]: Flushing usage events
+[0m03:34:59.291608 [debug] [MainThread]: An error was encountered while trying to flush usage events

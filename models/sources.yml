@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: mailshake-analysis-486717
+    schema: BRONZE
+    tables:
+      - name: campaigns
+      - name: recipients  
+      - name: leads
+      - name: senders
+      - name: team_members
+      - name: activity_sent
+      - name: activity_opens
+      - name: activity_clicks
+      - name: activity_replies
