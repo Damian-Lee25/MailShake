@@ -1,3 +1,16 @@
 # Environment files
 .env 
-
+# Teams configuration file
+teams_config.json
+# Raw data directory
+raw_mailshake_data
+# Status files
+migration_status.csv
+recipients_migration_status.csv
+activity_migration_status.csv
+# Log files
+migration.log
+recipients_extraction.log
+activity_extraction.log
+# CSV files
+migration_status.csv
